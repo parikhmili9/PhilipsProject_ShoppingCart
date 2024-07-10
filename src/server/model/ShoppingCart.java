@@ -12,7 +12,7 @@ public class ShoppingCart {
 
     public void addItem(CartItem item){
         for(CartItem cartItem : items){
-            if(cartItem.getName().equals(item.getName())){
+            if(cartItem.getName().equals(item.getName()) && cartItem.getPrice() == item.getPrice()){
                 cartItem.setQuantity(cartItem.getQuantity() + item.getQuantity());
                 return;
             }

@@ -3,5 +3,6 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/json-20210307.jar",
+        "test-lib\\**\\*.jar"
     ]
 }
