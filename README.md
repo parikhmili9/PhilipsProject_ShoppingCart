@@ -1,6 +1,7 @@
 # Shopping Cart Service
+(Mili Parikh)
 
-This project implements a simple shopping cart service with a backend API and a client application. The service allows users to add items to the cart and view the cart contents through API calls. It is implemented in Java without using Spring Boot, utilizing `java.net.http.HttpRequest` for HTTP communication.
+This project implements a simple shopping cart service with a backend API and a client application. The service allows users to add items to the cart and view the cart contents through API calls. It is implemented in Java, utilizing `java.net.http.HttpRequest` for HTTP communication.
 
 ## Project Structure
 
@@ -77,7 +78,10 @@ You should see Server started on port 8000 indicating that the server is running
 
 ### Running Tests
 
-1. Ensure you are in the root directory of the project.
+1. Ensure you are in the test directory of the project.
+    ```
+    cd test
+    ```
 2. Compile the test classes:
     ```
     javac -cp .:path/to/junit-platform-console-standalone-1.7.1.jar test/*.java
