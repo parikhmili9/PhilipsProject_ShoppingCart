@@ -9,12 +9,17 @@ import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * This class handles the client side and sends HTTP POST/GET requests to the server based
+ * on the inputs provided by the user of the application.
+ */
 public class Client {
     private static final String BASE_URL = "http://localhost:8000/api/cart";
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         
+        // Continously prompt the user to inputs
         while (true) {
             System.out.println("\nAvailable Commands:");
             System.out.println("1. Add item to cart");
@@ -23,7 +28,7 @@ public class Client {
 
             System.out.print("Enter command number: ");
             int command = readIntInput(scanner);
-            scanner.nextLine(); // consume newline
+            scanner.nextLine();
 
             switch (command) {
                 case 1:
@@ -42,6 +47,12 @@ public class Client {
         }
     }
 
+    /**
+     * Handles adding item to the cart, takes user inputs, creates a JSON object with those inputs and
+     * sets up HTTP connection for POST request
+     * @param scanner
+     * @throws IOException
+     */
     private static void addItemToCart(Scanner scanner) throws IOException {
         System.out.print("Enter item name: ");
         String name = scanner.nextLine();
@@ -50,22 +61,26 @@ public class Client {
 
         int quantity = readIntInput(scanner, "Enter item quantity: ");
 
+         // Create a JSON object with the item details
         JSONObject json = new JSONObject();
         json.put("name", name);
         json.put("price", price);
         json.put("quantity", quantity);
 
+        // Set up the HTTP connection for the POST request
         URL url = new URL(BASE_URL + "/add");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
 
+         // Write the JSON object to the output stream
         try (OutputStream os = conn.getOutputStream()) {
             byte[] input = json.toString().getBytes("utf-8");
             os.write(input, 0, input.length);
         }
 
+        // Get the response code
         int responseCode = conn.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             System.out.println("Item added to cart.");
@@ -76,17 +91,26 @@ public class Client {
         conn.disconnect();
     }
 
+    /**
+     * Handles viweing items of the cart, sets up HTTP connection for GET request, reads the response
+     * body and parses the JSON array to display the cart contents.
+     * @throws IOException
+     */
     private static void viewCart() throws IOException {
+        // Set up the HTTP connection for the GET request
         URL url = new URL(BASE_URL + "/view");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 
+        // Get the response code and handle the response
         int responseCode = conn.getResponseCode();
         if (responseCode == 200) {
+            // Read the response body
             Scanner responseScanner = new Scanner(conn.getInputStream());
             String responseBody = responseScanner.useDelimiter("\\A").next();
             responseScanner.close();
 
+            // Parse the JSON array and display cart contents
             JSONArray jsonArray = new JSONArray(responseBody);
             System.out.println("Cart Contents:");
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -102,6 +126,8 @@ public class Client {
         conn.disconnect();
     }
 
+    // Helper method to read an integer input from the user, if the input is not integer then
+    // prompt the user for another valid input.
     private static int readIntInput(Scanner scanner) {
         while (true) {
             try {
@@ -113,6 +139,8 @@ public class Client {
         }
     }
 
+    // Helper method to read an double input from the user, if the input is not double then
+    // prompt the user for another valid input.
     private static double readDoubleInput(Scanner scanner, String prompt) {
         while (true) {
             try {
@@ -125,6 +153,8 @@ public class Client {
         }
     }
 
+    // Helper method to read an integer input from the user, if the input is not integer then
+    // prompt the user for another valid input.
     private static int readIntInput(Scanner scanner, String prompt) {
         while (true) {
             try {

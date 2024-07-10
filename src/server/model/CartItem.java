@@ -1,5 +1,9 @@
 package server.model;
 
+/**
+ * This class represents an item in the cart with the attributes name, price and quantity.
+ * This class also has the getters and setters for these attributes.
+ */
 public class CartItem {
 
     private String name;
