@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,7 +22,7 @@ public class Client {
             System.out.println("3. Exit");
 
             System.out.print("Enter command number: ");
-            int command = scanner.nextInt();
+            int command = readIntInput(scanner);
             scanner.nextLine(); // consume newline
 
             switch (command) {
@@ -45,12 +46,9 @@ public class Client {
         System.out.print("Enter item name: ");
         String name = scanner.nextLine();
 
-        System.out.print("Enter item price: ");
-        double price = scanner.nextDouble();
+        double price = readDoubleInput(scanner, "Enter item price: ");
 
-        System.out.print("Enter item quantity: ");
-        int quantity = scanner.nextInt();
-        scanner.nextLine(); // consume newline
+        int quantity = readIntInput(scanner, "Enter item quantity: ");
 
         JSONObject json = new JSONObject();
         json.put("name", name);
@@ -69,7 +67,7 @@ public class Client {
         }
 
         int responseCode = conn.getResponseCode();
-        if (responseCode == 200) {
+        if (responseCode == HttpURLConnection.HTTP_OK) {
             System.out.println("Item added to cart.");
         } else {
             System.out.println("Failed to add item to cart. Response code: " + responseCode);
@@ -102,5 +100,40 @@ public class Client {
         }
 
         conn.disconnect();
+    }
+
+    private static int readIntInput(Scanner scanner) {
+        while (true) {
+            try {
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // Clear the invalid input
+            }
+        }
+    }
+
+    private static double readDoubleInput(Scanner scanner, String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                return scanner.nextDouble();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Clear the invalid input
+            }
+        }
+    }
+
+    private static int readIntInput(Scanner scanner, String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Clear the invalid input
+            }
+        }
     }
 }
